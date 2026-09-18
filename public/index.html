@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Auth Portal</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div id="toast" class="toast hidden"></div>
+
+  <div class="mobile-frame">
+    <!-- Top Pill Switcher -->
+    <div class="mode-switch" id="modeSwitcher">
+      <button type="button" id="tabLogin" class="switch-btn active">Log In</button>
+      <button type="button" id="tabSignup" class="switch-btn">Sign Up</button>
+    </div>
+
+    <!-- Screen 1: Log In -->
+    <section id="screenLogin" class="screen-view">
+      <div class="icon-bubble">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+          <polyline points="10 17 15 12 10 7"></polyline>
+          <line x1="15" y1="12" x2="3" y2="12"></line>
+        </svg>
+      </div>
+
+      <h2>Welcome Back</h2>
+      <p class="subtext">Log in with your registered account credentials</p>
+
+      <form id="loginForm" class="card-sheet">
+        <div class="field-box">
+          <label>Email Address</label>
+          <input type="email" id="loginEmail" placeholder="name@example.com" required />
+        </div>
+
+        <div class="field-box">
+          <label>Password</label>
+          <input type="password" id="loginPassword" placeholder="Enter your password" required />
+        </div>
+
+        <button type="submit" id="loginSubmitBtn" class="circle-action-btn" aria-label="Log In">
+          <span class="btn-arrow">→</span>
+          <div class="spinner hidden"></div>
+        </button>
+      </form>
+    </section>
+
+    <!-- Screen 2: Sign Up Details -->
+    <section id="screenSignup" class="screen-view hidden">
+      <div class="icon-bubble">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+          <path d="M12 18h.01"></path>
+          <path d="M8 6h8"></path>
+        </svg>
+      </div>
+
+      <h2>Create Account</h2>
+      <p class="subtext">We will dispatch a 6-digit OTP code to your email</p>
+
+      <form id="signupForm" class="card-sheet">
+        <div class="field-box">
+          <label>Full Name</label>
+          <input type="text" id="signupName" placeholder="Your name" required />
+        </div>
+
+        <div class="field-box">
+          <label>Email Address</label>
+          <input type="email" id="signupEmail" placeholder="name@example.com" required />
+        </div>
+
+        <div class="field-box">
+          <label>Password</label>
+          <input type="password" id="signupPassword" placeholder="Choose a password" required />
+        </div>
+
+        <button type="submit" id="sendOtpBtn" class="circle-action-btn" aria-label="Send OTP">
+          <span class="btn-arrow">→</span>
+          <div class="spinner hidden"></div>
+        </button>
+      </form>
+    </section>
+
+    <!-- Screen 3: OTP Verification -->
+    <section id="screenOtp" class="screen-view hidden">
+      <div class="icon-bubble">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+          <polyline points="22,6 12,13 2,6"></polyline>
+        </svg>
+      </div>
+
+      <h2>Verify OTP</h2>
+      <p class="subtext">Code sent to <b id="targetEmailText"></b></p>
+
+      <div class="otp-inputs">
+        <input type="text" maxlength="1" class="otp-box" inputmode="numeric" />
+        <input type="text" maxlength="1" class="otp-box" inputmode="numeric" />
+        <input type="text" maxlength="1" class="otp-box" inputmode="numeric" />
+        <input type="text" maxlength="1" class="otp-box" inputmode="numeric" />
+        <input type="text" maxlength="1" class="otp-box" inputmode="numeric" />
+        <input type="text" maxlength="1" class="otp-box" inputmode="numeric" />
+      </div>
+
+      <p class="resend-text">Didn't receive code? <button id="resendBtn" type="button">Change / Resend</button></p>
+
+      <div class="keypad">
+        <button type="button" class="key-btn">1</button>
+        <button type="button" class="key-btn">2</button>
+        <button type="button" class="key-btn">3</button>
+        <button type="button" class="key-btn">4</button>
+        <button type="button" class="key-btn">5</button>
+        <button type="button" class="key-btn">6</button>
+        <button type="button" class="key-btn">7</button>
+        <button type="button" class="key-btn">8</button>
+        <button type="button" class="key-btn">9</button>
+        <button type="button" class="key-btn empty"></button>
+        <button type="button" class="key-btn">0</button>
+        <button type="button" class="key-btn backspace">⌫</button>
+      </div>
+
+      <button id="verifyBtn" class="pill-submit-btn" type="button">
+        <span class="btn-text">Verify & Register</span>
+        <div class="spinner hidden"></div>
+      </button>
+    </section>
+
+    <!-- Screen 4: Protected Dashboard -->
+    <section id="screenDashboard" class="screen-view hidden">
+      <div class="icon-bubble">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </div>
+
+      <h2>User Dashboard</h2>
+      <p class="subtext">Authenticated Session Active</p>
+
+      <div class="card-sheet">
+        <div class="field-box">
+          <label>Account Holder</label>
+          <div id="dashName" style="font-weight: 600; font-size: 1rem; color: #2d3142;">—</div>
+        </div>
+
+        <div class="field-box">
+          <label>Email Address</label>
+          <div id="dashEmail" style="font-size: 0.9rem; color: #8d99ae;">—</div>
+        </div>
+
+        <button type="button" id="logoutBtn" class="pill-submit-btn" style="margin-top: 1rem; background: #ef4444; color: white;">
+          Log Out
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
