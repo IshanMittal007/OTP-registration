@@ -1,10 +1,11 @@
 :root {
   --primary-orange: #f28b24;
-  --bg-gradient: linear-gradient(180deg, #f7941d 0%, #ea6100 100%);
+  --primary-gradient: linear-gradient(135deg, #f7941d 0%, #ea6100 100%);
+  --bg-desktop: #f8fafc;
   --white: #ffffff;
-  --text-dark: #2d3142;
-  --text-muted: #8d99ae;
-  --input-border: #f0f0f0;
+  --text-dark: #1e293b;
+  --text-muted: #64748b;
+  --border-light: #e2e8f0;
 }
 
 * {
@@ -16,226 +17,224 @@
 
 body {
   min-height: 100vh;
-  background-color: #eb7d20;
+  background-color: var(--bg-desktop);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
+  padding: 2rem 1rem;
 }
 
-.mobile-frame {
+/* Master Responsive Shell */
+.app-container {
   width: 100%;
-  max-width: 380px;
-  min-height: 640px;
-  background: var(--bg-gradient);
-  border-radius: 40px;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.2);
+  max-width: 960px;
+  min-height: 600px;
+  background: var(--white);
+  border-radius: 28px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+}
+
+/* Left Brand Showcase (Desktop only) */
+.brand-sidebar {
+  background: var(--primary-gradient);
+  padding: 3.5rem 3rem;
+  color: var(--white);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 1.8rem 1.4rem;
-  color: var(--white);
+  justify-content: space-between;
   position: relative;
 }
 
-/* Tab Switcher */
+.brand-badge {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.2);
+  display: inline-block;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  width: fit-content;
+}
+
+.brand-showcase h1 {
+  font-size: 2.1rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 1rem 0 0.8rem;
+}
+
+.brand-showcase p {
+  font-size: 0.95rem;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+.brand-points {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+  font-size: 0.88rem;
+}
+.brand-points div {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brand-footer {
+  font-size: 0.78rem;
+  opacity: 0.75;
+}
+
+/* Right Interactive Form Area */
+.auth-main {
+  padding: 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-wrapper {
+  width: 100%;
+  max-width: 360px;
+}
+
+/* Mode Switcher */
 .mode-switch {
   display: flex;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
+  background: #f1f5f9;
+  border-radius: 12px;
   padding: 4px;
-  margin-bottom: 1.5rem;
-  width: 100%;
-  max-width: 220px;
+  margin-bottom: 2rem;
 }
 .switch-btn {
   flex: 1;
   border: none;
   background: none;
-  color: var(--white);
+  color: var(--text-muted);
   font-weight: 600;
   font-size: 0.85rem;
-  padding: 0.45rem 0;
-  border-radius: 16px;
+  padding: 0.55rem 0;
+  border-radius: 9px;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  transition: all 0.2s ease;
 }
 .switch-btn.active {
   background: var(--white);
   color: var(--primary-orange);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
 }
 
-.screen-view {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+.auth-header {
+  margin-bottom: 1.8rem;
 }
-
-.icon-bubble {
-  width: 68px;
-  height: 68px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 22px;
-  display: grid;
-  place-items: center;
-  margin-bottom: 1rem;
-}
-.icon-bubble svg {
-  width: 32px;
-  height: 32px;
-  stroke: var(--white);
-}
-
-h2 {
-  font-size: 1.3rem;
+.auth-header h2 {
+  font-size: 1.5rem;
   font-weight: 700;
-  margin-bottom: 0.3rem;
-}
-
-.subtext {
-  font-size: 0.78rem;
-  opacity: 0.9;
-  line-height: 1.3;
-  margin-bottom: 1.5rem;
-}
-
-.card-sheet {
-  width: 100%;
-  background: var(--white);
-  border-radius: 28px;
-  padding: 1.8rem 1.2rem 2.8rem 1.2rem;
   color: var(--text-dark);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-  position: relative;
+  margin-bottom: 0.25rem;
+}
+.auth-header p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
 }
 
+/* Form Styles */
 .field-box {
   display: flex;
   flex-direction: column;
-  text-align: left;
-  margin-bottom: 0.9rem;
+  margin-bottom: 1.2rem;
 }
 .field-box label {
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   font-weight: 600;
-  color: var(--text-muted);
-  margin-bottom: 0.25rem;
+  color: var(--text-dark);
+  margin-bottom: 0.35rem;
 }
 .field-box input {
-  padding: 0.75rem 0.9rem;
-  border-radius: 12px;
-  border: 1.5px solid var(--input-border);
-  background: #fbfbfb;
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  border: 1.5px solid var(--border-light);
+  font-size: 0.9rem;
+  color: var(--text-dark);
   outline: none;
-  font-size: 0.88rem;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 .field-box input:focus {
   border-color: var(--primary-orange);
+  box-shadow: 0 0 0 3px rgba(242, 139, 36, 0.15);
 }
 
-.circle-action-btn {
-  position: absolute;
-  bottom: -22px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 48px;
-  height: 48px;
+.action-btn {
+  width: 100%;
+  padding: 0.85rem;
+  border-radius: 10px;
+  border: none;
   background: var(--primary-orange);
-  border: 4px solid var(--white);
-  border-radius: 50%;
   color: var(--white);
-  font-size: 1.3rem;
-  font-weight: bold;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 6px 15px rgba(234, 97, 0, 0.4);
-  display: grid;
-  place-items: center;
+  box-shadow: 0 4px 15px rgba(234, 97, 0, 0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.2s;
+}
+.action-btn:hover {
+  opacity: 0.92;
 }
 
-/* Segmented OTP */
+/* OTP Segmented Inputs */
 .otp-inputs {
   display: flex;
-  gap: 0.35rem;
-  margin-bottom: 0.8rem;
+  gap: 0.5rem;
+  justify-content: space-between;
+  margin: 1.2rem 0;
 }
 .otp-box {
-  width: 42px;
-  height: 46px;
-  background: rgba(255, 255, 255, 0.9);
-  border: none;
-  border-radius: 12px;
+  width: 48px;
+  height: 52px;
+  background: #f8fafc;
+  border: 1.5px solid var(--border-light);
+  border-radius: 10px;
   text-align: center;
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: var(--text-dark);
   outline: none;
 }
 .otp-box:focus {
-  box-shadow: 0 0 0 2px var(--white);
+  border-color: var(--primary-orange);
+  box-shadow: 0 0 0 3px rgba(242, 139, 36, 0.15);
 }
 
 .resend-text {
-  font-size: 0.72rem;
-  margin-bottom: 1rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 1.5rem;
 }
 .resend-text button {
+  border: none;
   background: none;
-  border: none;
-  color: var(--white);
-  font-weight: 700;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-/* Keypad */
-.keypad {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.5rem;
-  width: 100%;
-  max-width: 270px;
-  margin-bottom: 1rem;
-}
-.key-btn {
-  background: rgba(255, 255, 255, 0.15);
-  border: none;
-  border-radius: 12px;
-  height: 40px;
-  color: var(--white);
-  font-size: 1.1rem;
+  color: var(--primary-orange);
   font-weight: 600;
   cursor: pointer;
 }
-.key-btn:active {
-  background: rgba(255, 255, 255, 0.3);
-}
-.key-btn.empty {
-  visibility: hidden;
-}
 
-.pill-submit-btn {
-  width: 100%;
-  padding: 0.8rem;
-  border-radius: 20px;
-  border: none;
-  background: var(--white);
-  color: var(--primary-orange);
-  font-weight: 700;
-  font-size: 0.9rem;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
+/* Spinners & Helpers */
 .spinner {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: currentColor;
+  border-top-color: var(--white);
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
 }
@@ -243,15 +242,30 @@ h2 {
 
 .toast {
   position: fixed;
-  top: 1rem;
-  padding: 0.7rem 1.2rem;
-  background: #2d3142;
-  color: white;
+  top: 1.5rem;
+  right: 1.5rem;
+  padding: 0.85rem 1.4rem;
   border-radius: 10px;
-  font-size: 0.82rem;
-  font-weight: 500;
-  z-index: 100;
+  font-size: 0.85rem;
+  color: var(--white);
+  z-index: 1000;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 }
 .toast.success { background: #10b981; }
 .toast.error { background: #ef4444; }
 .hidden { display: none !important; }
+
+/* Responsive adjustments for Tablets/Mobiles */
+@media (max-width: 768px) {
+  .app-container {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+    border-radius: 24px;
+  }
+  .brand-sidebar {
+    display: none;
+  }
+  .auth-main {
+    padding: 2.5rem 1.8rem;
+  }
+}
