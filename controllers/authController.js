@@ -126,6 +126,7 @@ exports.login = async (req, res) => {
     await user.save();
 
     res.cookie('refreshToken', refreshToken, {
+      path: '/',
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
@@ -189,5 +190,91 @@ exports.logout = async (req, res) => {
   } catch (err) {
     console.error('Logout error:', err);
     res.status(500).json({ message: 'Server error during logout.' });
+  }
+};
+
+// Forgot password
+exports.forgotPassword = async (req, res) => {
+  try{
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required.' });
+    }
+
+    const cleanEmail = email.toLowerCase().trim();
+    
+    const user = await User.findOne({ email: cleanEmail });
+    if (!user) {
+      return res.status(404).json({ message: 'No account find with this email.' });
+    }
+
+    const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedOtp = await bcrypt.hash(generatedOtp, salt);
+
+    await Otp.deleteMany({ email: cleanEmail});
+
+    await Otp.create({
+      email: cleanEmail,
+      otp: hashedOtp
+    });
+
+    await sendEmail (
+      cleanEmail,
+      generatedOtp
+    );
+
+    res.status(200).json({ message: 'Password reset otp sent to your mail.' });
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.status(500).json({ message: 'Server error while dispatching reset OTP.' });
+  }
+};
+
+// Reset password
+exports.resetPassword = async (req, res) => {
+  try {
+    const { email, otp, newPassword} = req.body;
+
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({ message: 'Email, OTP, and new password are required.' });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ message: 'New password must be at least 6 characters long.' });
+    }
+
+    const cleanEmail = email.toLowerCase().trim();
+
+    const otpRecord = await Otp.findOne({ email: cleanEmail });
+    if (!otpRecord) {
+      return res.status(400).json({ message: 'OTP has expired or was not requested.' });
+    }
+
+    const isOtpValid = await bcrypt.compare(otp.toString(), otpRecord.otp);
+    if (!isOtpValid) {
+      return res.status(400).json({ message: 'Invalid OTP code.' });
+    }
+
+    const user = await User.findOne({ email: cleanEmail });
+    if (!user){
+      return res.status(400).json({ message: 'User not found' });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    user.password = hashedPassword;
+    user.refreshToken = null;
+    await user.save();
+
+    await Otp.deleteMany({ email: cleanEmail });
+
+    res.status(200).json({ message: 'Password reset successful. Please log in with your new password.' });
+  } catch (error) {
+    console.error('Reset password error:', error);
+    res.status(500).json({ message: 'Server error while resetting password.' });
   }
 };
