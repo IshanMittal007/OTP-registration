@@ -4,12 +4,12 @@ const User = require('../models/User');
 const Otp = require('../models/Otp');
 const sendEmail = require('../utils/sendEmail');
 
-// Token generation helpers
+// Token generation 
 const generateAccessToken = (user) => {
   return jwt.sign(
     { userId: user._id, email: user.email },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: '15m' } // Fixed: was 'experiesIn'
+    { expiresIn: '15m' } 
   );
 };
 
@@ -21,7 +21,7 @@ const generateRefreshToken = (user) => {
   );
 };
 
-// 1. SIGNUP - Dispatch OTP
+// 1. SIGNUP 
 exports.signup = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -60,7 +60,7 @@ exports.signup = async (req, res) => {
   }
 };
 
-// 2. VERIFY OTP - Check hash & create user
+// 2. VERIFY OTP 
 exports.verifyOtp = async (req, res) => {
   try {
     const { email, otp } = req.body;
@@ -76,7 +76,6 @@ exports.verifyOtp = async (req, res) => {
       return res.status(400).json({ message: 'OTP expired or registration request not found.' });
     }
 
-    // Fixed: Verify the entered OTP against the hashed OTP in MongoDB
     const isMatch = await bcrypt.compare(otp.toString(), pendingRecord.otp);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid verification code.' });
@@ -99,7 +98,7 @@ exports.verifyOtp = async (req, res) => {
   }
 };
 
-// 3. LOGIN - Issue access token + refresh token cookie
+// 3. LOGIN 
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -133,7 +132,6 @@ exports.login = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
 
-    // Fixed: Return accessToken so client can use it for protected routes
     res.status(200).json({
       message: 'Login successful.',
       accessToken,
@@ -144,10 +142,10 @@ exports.login = async (req, res) => {
   }
 };
 
-// 4. TOKEN REFRESH - Silent renewal
+// 4. TOKEN REFRESH 
 exports.refreshToken = async (req, res) => {
   try {
-    const token = req.cookies?.refreshToken; // Fixed: was req.cookie (must be req.cookies)
+    const token = req.cookies?.refreshToken; 
     if (!token) {
       return res.status(401).json({ message: 'No refresh token provided.' });
     }
@@ -171,7 +169,7 @@ exports.refreshToken = async (req, res) => {
   }
 };
 
-// 5. LOGOUT - Clear session
+// 5. LOGOUT 
 exports.logout = async (req, res) => {
   try {
     const token = req.cookies?.refreshToken;
